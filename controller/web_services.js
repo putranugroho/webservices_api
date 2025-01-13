@@ -1,9 +1,8 @@
+const axios = require("axios").default;
 const express = require('express');
-const router = express.Router();
 require('dotenv').config;
-const { validateApiKey } = require('../../../utils/validateApiKey');
 
-const url_core = process.env.CORE_URL
+const url_collme = process.env.URL_COLLME
 const url_cms = process.env.CMS_URL
 
 const connect_axios = async (url, api, route, data) => {
@@ -56,12 +55,11 @@ const connect_axios = async (url, api, route, data) => {
     }
 }
 
-
-router.post('/report', validateApiKey, async (req, res) => {
+const report = async (req, res) => {
     let {nohp, report_type} = req.body;
     try {
         const data_report = {nohp, report_type}
-        let request_report = await connect_axios(url_cms, 'CMS', 'collme/cis/report', data_report)
+        let request_report = await connect_axios(url_collme, 'CMS', 'collme/cis/report', data_report)
         if (request_report.code !== "000" && request_report.data === null) {
             console.log(request_report);
             res.status(200).send(request_report);
@@ -80,14 +78,13 @@ router.post('/report', validateApiKey, async (req, res) => {
         console.log("erro get product", error);
         res.send(error);
     }
-});
+};
 
-
-router.post('/report/periode', validateApiKey, async (req, res) => {
+const report_periode = async (req, res) => {
     let {nohp, tgl_awal, tgl_akhir} = req.body;
     try {
         const data_report = {nohp, tgl_awal, tgl_akhir}
-        let request_report = await connect_axios(url_cms, 'CMS', 'collme/cis/report/periode', data_report)
+        let request_report = await connect_axios(url_collme, 'CMS', 'collme/cis/report/periode', data_report)
         if (request_report.code !== "000" && request_report.data === null) {
             console.log(request_report);
             res.status(200).send(request_report);
@@ -106,6 +103,6 @@ router.post('/report/periode', validateApiKey, async (req, res) => {
         console.log("erro get product", error);
         res.send(error);
     }
-});
+};
 
-module.exports = router
+module.exports = { report, report_periode }

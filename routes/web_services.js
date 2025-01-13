@@ -1,13 +1,12 @@
 const express = require('express');
-const app = express();
 const router = express.Router();
 require('dotenv').config;
-const { URL_CMS } = process.env
+const { validateApiKey } = require('../Utility/validateApiKey');
 
-const web_services = require('../controller/web_services')
+const {report, report_periode} = require('../controller/web_services')
 
-router.use('/web_services', web_services)
-
+router.post('/report', validateApiKey, report)
+router.post('/report/periode', validateApiKey, report_periode)
 
 
 module.exports = router

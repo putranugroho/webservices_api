@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
+const web_services = require('./routes/web_services');
 
 /** set router */
 // const { sequelize } = require("./connection");
@@ -16,18 +17,20 @@ const cors = require("cors");
 //     console.error("UNABLE TO ESTABLISH CONNECTION: ", err);
 //   });
 
-// const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({ extended: false }));
+/** set path */
+app.use("/web_services", web_services);
 
 app.get("/", (req, res) => {
-  res.send("Web_Services Running");
+  res.send("Web Services Running");
 });
 
 app.listen(port, () => {
-  console.log(`web_Services listening at http://localhost:${port}`);
+  console.log(`web Services listening at http://localhost:${port}`);
 });
